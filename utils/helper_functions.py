@@ -8,8 +8,8 @@ from sklearn.cluster import KMeans
 import gc
 import base64
 import mlflow
-import mlflow.sklearn
-mlflow.set_tracking_uri(r'file////home/ec2-user/p7_credit_score/OC_P7_CreditScore_github/db/mlruns')
+#import mlflow.sklearn
+#mlflow.set_tracking_uri(r'file////home/ec2-user/p7_credit_score/OC_P7_CreditScore_github/db/mlruns')
 
 import os
 
@@ -17,32 +17,32 @@ import os
 current_directory = os.getcwd()
 print(f"Current Directory: {current_directory}")
 
-def load_model(run_id = '03c71df18b4a4f60b7887fa638ca423e', model_name='Best_model_on_features_selection'):
-    print(mlflow.__version__)
-    #mlflow.set_experiment("Best_model_on_feature_selection")
-    model_uri = f"runs:/{run_id}/{model_name}"
-    mlflow.start_run(run_id=run_id)
-    model = mlflow.sklearn.load_model(model_uri)
-    mlflow.end_run()
-    return model
+#def load_model(run_id = '03c71df18b4a4f60b7887fa638ca423e', model_name='Best_model_on_features_selection'):
+#    print(mlflow.__version__)
+#    #mlflow.set_experiment("Best_model_on_feature_selection")
+#    model_uri = f"runs:/{run_id}/{model_name}"
+#    mlflow.start_run(run_id=run_id)
+#    model = mlflow.sklearn.load_model(model_uri)
+#    mlflow.end_run()
+#    return model
 
 
-#def load_model(model_path='model/best_model_Custom_F1_Score.pkl'):
-#    """
-#    Load the trained model from a given file path.
-#
-#    Parameters:
-#    - model_path: str, path to the trained model file.
-#
-#    Returns:
-#    - model: object, the loaded machine learning model.
-#    """
-#    # Load the trained model
-#    with open(model_path, 'rb') as model_file:
-#        model, booster = pickle.load(model_file)
-#    gc.collect()
-#    
-#    return model, booster
+def load_model(model_path='model/model.pkl'):
+    """
+    Load the trained model from a given file path.
+
+    Parameters:
+    - model_path: str, path to the trained model file.
+
+    Returns:
+    - model: object, the loaded machine learning model.
+    """
+    # Load the trained model
+    with open(model_path, 'rb') as model_file:
+        model, booster = pickle.load(model_file)
+    gc.collect()
+    
+    return model#, booster
 
 def load_data(data_path='DB/test_df_cleaned_head_100.csv'):
     data = pd.read_csv(data_path, index_col='SK_ID_CURR')
