@@ -45,20 +45,20 @@ def load_model(model_path='model/model.pkl'):
     
     return model#, booster
 
-def load_data(data_path='DB/test_df_cleaned_head_100.csv'):
+def load_data(data_path='db/test_df_cleaned_head_100.csv'):
     data = pd.read_csv(data_path, index_col='SK_ID_CURR')
     gc.collect()
 
     return data, data.columns
 
 # To fetch client generation information (Occupation, Income...)
-def load_raw_data(data_path='DB/application_test.csv'):
+def load_raw_data(data_path='db/application_test.csv'):
     data_raw = pd.read_csv(data_path, index_col='SK_ID_CURR').fillna('')
     gc.collect()
 
     return data_raw
 
-def load_train_data(columns_to_select, data_path='DB/train_df_cleaned_sample_6000.csv'):
+def load_train_data(columns_to_select, data_path='db/train_df_cleaned_sample_6000.csv'):
     train_df = pd.read_csv(data_path, index_col='SK_ID_CURR')[['TARGET'] + columns_to_select.tolist()].sample(n=5000)
     train_df, kmeansModel = Kmeans_add_cluster_column(train_df)
     gc.collect()
