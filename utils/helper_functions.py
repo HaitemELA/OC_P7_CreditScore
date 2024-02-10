@@ -9,7 +9,7 @@ import gc
 import base64
 import mlflow
 import mlflow.sklearn
-mlflow.set_tracking_uri(r'file///./db/mlruns')
+mlflow.set_tracking_uri(r'file////home/ec2-user/p7_credit_score/OC_P7_CreditScore_github/db/mlruns')
 
 import os
 
