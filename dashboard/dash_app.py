@@ -139,7 +139,7 @@ def create_credit_score_gauge(predicted_prob):
     try:
         # Convert probability to a score between 0 and 100
         credit_score = int(predicted_prob[0] * 100)
-        Threshold = 37.37
+        Threshold = 100*(1 - 0.4949)
 
         # Define labels for likely to pay or not
         pay_labels = ["Not Likely to Pay", "Likely to Pay"]
@@ -216,8 +216,8 @@ def distri_plot(merged_df, feature, title):
     # Plot position of the client's value
     fig_value_position = go.Figure()
     # Add histogram trace for the selected feature
-    fig_value_position.add_trace(go.Histogram(x=merged_df[merged_df['TARGET'] == 0][feature], name=feature + ' destribution on class 0', nbinsx=100, histnorm='percent'))
-    fig_value_position.add_trace(go.Histogram(x=merged_df[merged_df['TARGET'] == 1][feature], name=feature + ' destribution on class 1', nbinsx=100, histnorm='percent'))
+    fig_value_position.add_trace(go.Histogram(x=merged_df[merged_df['TARGET'] == 0][feature], name=feature + ' destribution on class 0', nbinsx=100, histnorm='percent', marker=dict(color='green')))
+    fig_value_position.add_trace(go.Histogram(x=merged_df[merged_df['TARGET'] == 1][feature], name=feature + ' destribution on class 1', nbinsx=100, histnorm='percent', marker=dict(color='orange')))
     
     # Add vertical line for the client's value position
     client_value_position = merged_df[feature].iloc[-1]
@@ -281,7 +281,7 @@ def main():
     ## Open the image using the absolute path
     ##st.session_state.resized_logo = st.session_state.logo.resize((20, 20), Image.Resampling.BICUBIC)
     #st.image(st.session_state.logo1, caption='Prêt à dépenser')
-    st.markdown("<h1 style='text-align: center;'>CREDIT SCORE ANALYZER</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center;'>CREDIT SCORE ANALYZER TASBAS</h1>", unsafe_allow_html=True)
 
 
     global_shap_values, feature_names, exp_0, featue_importance = get_shap_values()
