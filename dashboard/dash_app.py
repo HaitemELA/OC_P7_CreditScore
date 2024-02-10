@@ -42,18 +42,18 @@ def st_shap(plot, height=None):
 
 @st.cache_data(hash_funcs={np.ndarray: lambda x: x.view(dtype=np.uint8)})
 def fetch_shap_values():
-    api_url = "http://localhost:8000/shap_values"  # Update with the correct port
+    api_url = "http://localhost:8001/shap_values"  # Update with the correct port
     return requests.get(api_url)
 
 #@st.cache_data(hash_funcs={np.ndarray: lambda x: x.view(dtype=np.uint8)})
 def run_api(SK_ID_CURR):
-    api_url = "http://localhost:8000/predict"  # Update with the correct port
+    api_url = "http://localhost:8001/predict"  # Update with the correct port
     json_data = json.dumps({"data": {"SK_ID_CURR": str(SK_ID_CURR)}})
     return requests.post(api_url, data=json_data, headers={'Content-Type': 'application/json'})
 
 @st.cache_data(hash_funcs={np.ndarray: lambda x: x.view(dtype=np.uint8)})
 def get_clients_data(selected_features):
-    api_url = "http://localhost:8000/all_clients"  # Get all clients data
+    api_url = "http://localhost:8001/all_clients"  # Get all clients data
     selected_features= ['TARGET', 'Cluster'] + selected_features
 
     json_data = json.dumps({"data": {"Features": str(selected_features)}})
@@ -82,7 +82,7 @@ def get_clients_data(selected_features):
 def fetch_client_info(SK_ID_CURR):
     try:
         # Call the API to get the Scores
-        api_url = "http://localhost:8000/client"  # Update with the correct port
+        api_url = "http://localhost:8001/client"  # Update with the correct port
         json_data = json.dumps({"data": {"SK_ID_CURR": str(SK_ID_CURR)}})
         response = requests.post(api_url, data=json_data, headers={'Content-Type': 'application/json'})
 

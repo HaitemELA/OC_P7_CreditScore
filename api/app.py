@@ -206,5 +206,5 @@ def get_clients_data():
 
 if __name__ == '__main__':
     gc.collect()
-    app.run(host='localhost', port=8000, debug=True)
+    app.run(host='localhost', port=8001, debug=True)
 
