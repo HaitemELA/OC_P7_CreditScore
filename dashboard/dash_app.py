@@ -17,7 +17,7 @@ import base64
 
 
 sys.path.append('./utils')
-from .dashboard_helper_functions import Decode_shap_values, Get_Target_Decision
+from dashboard_helper_functions import Decode_shap_values, Get_Target_Decision
 
 #logging.basicConfig(level=os.environ.get("LOGLEVEL", "DEBUG"))
 
