@@ -281,7 +281,7 @@ def main():
     ## Open the image using the absolute path
     ##st.session_state.resized_logo = st.session_state.logo.resize((20, 20), Image.Resampling.BICUBIC)
     #st.image(st.session_state.logo1, caption='Prêt à dépenser')
-    st.markdown("<h1 style='text-align: center;'>CREDIT SCORE ANALYZER TASBAS</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center;'>CREDIT SCORE ANALYZER</h1>", unsafe_allow_html=True)
 
 
     global_shap_values, feature_names, exp_0, featue_importance = get_shap_values()
@@ -295,9 +295,6 @@ def main():
         #st.session_state.logo = Image.open(st.session_state.logo_path)
 #
         #st.image(st.session_state.logo, caption='Prêt à dépenser')
-
-
-
         analysis_type = st.radio(
             "Please select an analysis to perform",
             ('Global analysis', 'Client analysis'))
@@ -314,25 +311,6 @@ def main():
         #    with st.sidebar:
         #        st.warning(f"Sorry! Unable to get Scores from the API. Client not found.")
     
-    if analysis_type == 'Global analysis':
-        st.session_state.top_global_features = st.slider("You can select up to 20 features", min_value=1, max_value=20, value=10)
-        with st.container(height = 600, border=True):
-            st.title("Average features impact on the prediction")
-            st.pyplot(shap.summary_plot(global_shap_values, feature_names, plot_type='bar', show=True, color_bar=True, plot_size=0.18,
-                                    title='Average features impact on the prediction', max_display=st.session_state.top_global_features))
-        col_g1, col_g2 = st.columns([1, 1])
-        with col_g1:
-            st.title("Definition of a successful loan request")
-            st.session_state.violin_blue = shap.summary_plot(global_shap_values[0], feature_names, plot_type='violin',
-                                            show=True, title='Definition of a successful client', color='blue',
-                                            color_bar=True, max_display=st.session_state.top_global_features)
-            
-            st.pyplot(st.session_state.violin_blue)
-        with col_g2:
-            st.title("Definition of a refused loan request")
-            st.pyplot(shap.summary_plot(global_shap_values[1], feature_names, plot_type='violin', show=True, title='Definition of a successful client', color='red', color_bar=True, max_display=st.session_state.top_global_features))
-        #st.pyplot(shap.summary_plot(global_shap_values, feature_names, plot_type='dot', show=True, color_bar=True, max_display=st.session_state.top_global_features))
-
     if analysis_type == 'Client analysis':
         # # Create columns for layout
         col1, col2, col3 = st.columns([2, 1, 2])
@@ -457,6 +435,25 @@ def main():
             #    st.pyplot(shap.summary_plot(shap_values[1], top_features_names, plot_type='dot', show=True, color_bar=True, max_display=15))
             #    #shap.summary_plot(shap_values, st.session_state.df_clients, plot_type='bar', show=False, color_bar=False, max_display=15)
 
+        
+    if analysis_type == 'Global analysis':
+        st.session_state.top_global_features = st.slider("You can select up to 20 features", min_value=1, max_value=20, value=10)
+        with st.container(height = 600, border=True):
+            st.title("Average features impact on the prediction")
+            st.pyplot(shap.summary_plot(global_shap_values, feature_names, plot_type='bar', show=True, color_bar=True, plot_size=0.18,
+                                    title='Average features impact on the prediction', max_display=st.session_state.top_global_features))
+        col_g1, col_g2 = st.columns([1, 1])
+        with col_g1:
+            st.title("Definition of a successful loan request")
+            st.session_state.violin_blue = shap.summary_plot(global_shap_values[0], feature_names, plot_type='violin',
+                                            show=True, title='Definition of a successful client', color='blue',
+                                            color_bar=True, max_display=st.session_state.top_global_features)
+            
+            st.pyplot(st.session_state.violin_blue)
+        with col_g2:
+            st.title("Definition of a refused loan request")
+            st.pyplot(shap.summary_plot(global_shap_values[1], feature_names, plot_type='violin', show=True, title='Definition of a successful client', color='red', color_bar=True, max_display=st.session_state.top_global_features))
+        #st.pyplot(shap.summary_plot(global_shap_values, feature_names, plot_type='dot', show=True, color_bar=True, max_display=st.session_state.top_global_features))
 
 
 if __name__ == "__main__":
