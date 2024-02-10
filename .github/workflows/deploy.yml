@@ -21,16 +21,23 @@ jobs:
             cd /home/ec2-user/p7_credit_score/OC_P7_CreditScore_github
             git fetch origin
             git reset --hard origin/main
-      - name: Run application
+      - name: Check if app.py is already running
         run: |
-            cd /home/ec2-user/p7_credit_score/OC_P7_CreditScore_github
-            nohup python3.10 api/app.py > output.log 2>&1 &
-            nohup streamlit run dashboard/dash_app.py > streamlit.log 2>&1 &
-            #mlflow ui --host 0.0.0.0 --port 5000 &
-            #mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri /home/ec2-user/p7_credit_score/OC_P7_CreditScore_github/mlflow
-
+            if pgrep -f "python3.10 api/app.py" > /dev/null; then
+                echo "App.py is already running, skipping..."
+            else
+                nohup python3.10 api/app.py > output.log 2>&1 &
+                echo "Started app.py"
+            fi
+      - name: Check if dash_app.py is already running
+        run: |
+            if pgrep -f "streamlit run dashboard/dash_app.py" > /dev/null; then
+                echo "dash_app.py is already running, skipping..."
+            else
+                nohup streamlit run dashboard/dash_app.py > streamlit.log 2>&1 &
+                echo "Started dash_app.py"
+            fi
       - name: Run Unit Tests
         run: |
             cd /home/ec2-user/p7_credit_score/OC_P7_CreditScore_github
             python3.10 -m pytest utils/unitary_test.py
-            
