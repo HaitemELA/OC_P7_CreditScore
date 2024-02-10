@@ -14,6 +14,12 @@ import shap
 import sys
 import pickle
 import base64
+from PIL import Image
+import os
+
+# Get the absolute path to the current directory
+current_dir = os.path.dirname(os.path.realpath(__file__))
+
 
 
 sys.path.append('./utils')
@@ -256,20 +262,42 @@ def get_shap_values():
     #return Decode_shap_values(encoded_shap_values)
     return global_shap_values, feature_names, exp_0, featue_importance
 
-
-
 def main():
-    st.set_page_config(
-    page_title="P7_Client_Dashboard",
-    page_icon="📊",
-    layout="wide"
-    )
+    st.set_page_config(page_title="P7_Client_Dashboard", page_icon="📊", layout="wide")
 
-    st.markdown("<h1 style='text-align: center;'>CREDIT SCORE ANALYZER</h1>", unsafe_allow_html=True)  
+    # Specify the absolute path to the logo image
+    #st.session_state.logo_path = os.path.join(current_dir, '../img/logo.png')
+    #st.session_state.logo = Image.open(st.session_state.logo_path)
+#
+    #width, height = st.session_state.logo.size 
+    ## Setting the points for cropped image 
+    #left = 6
+    #top = height / 4
+    #right = 174
+    #bottom = 3 * height / 4
+    #newsize = (20, 20)
+#
+    #st.session_state.logo1 = st.session_state.logo.crop((left, top, right, bottom)).resize(newsize)
+    ## Open the image using the absolute path
+    ##st.session_state.resized_logo = st.session_state.logo.resize((20, 20), Image.Resampling.BICUBIC)
+    #st.image(st.session_state.logo1, caption='Prêt à dépenser')
+    st.markdown("<h1 style='text-align: center;'>CREDIT SCORE ANALYZER</h1>", unsafe_allow_html=True)
+
+
     global_shap_values, feature_names, exp_0, featue_importance = get_shap_values()
 
     # Get client ID from the user
     with st.sidebar:
+        
+        ## Specify the absolute path to the logo image
+        #st.session_state.logo_path = os.path.join(current_dir, '../img/logo.png')
+        ## Open the image using the absolute path
+        #st.session_state.logo = Image.open(st.session_state.logo_path)
+#
+        #st.image(st.session_state.logo, caption='Prêt à dépenser')
+
+
+
         analysis_type = st.radio(
             "Please select an analysis to perform",
             ('Global analysis', 'Client analysis'))
@@ -282,6 +310,9 @@ def main():
             except ValueError:
                 st.sidebar.warning("Please enter a valid loan request ID.")
                 st.stop()  # Stop further execution if input is invalid
+        #else:
+        #    with st.sidebar:
+        #        st.warning(f"Sorry! Unable to get Scores from the API. Client not found.")
     
     if analysis_type == 'Global analysis':
         st.session_state.top_global_features = st.slider("You can select up to 20 features", min_value=1, max_value=20, value=10)
@@ -426,9 +457,7 @@ def main():
             #    st.pyplot(shap.summary_plot(shap_values[1], top_features_names, plot_type='dot', show=True, color_bar=True, max_display=15))
             #    #shap.summary_plot(shap_values, st.session_state.df_clients, plot_type='bar', show=False, color_bar=False, max_display=15)
 
-    else:
-        with st.sidebar:
-            st.warning(f"Sorry! Unable to get Scores from the API. Client not found.")
+
 
 if __name__ == "__main__":
     main()
