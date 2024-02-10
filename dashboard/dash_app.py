@@ -280,7 +280,7 @@ def main():
             try:
                 SK_ID_CURR = np.int64(SK_ID_CURR)
             except ValueError:
-                st.sidebar.warning("Invalid input. Please enter a valid loan request ID.")
+                st.sidebar.warning("Please enter a valid loan request ID.")
                 st.stop()  # Stop further execution if input is invalid
     
     if analysis_type == 'Global analysis':
@@ -359,7 +359,7 @@ def main():
 
 
             ## Create tabs
-            tabs = st.tabs(["Client Features importance", "Features distribution", "Additional Client Information", "Global analysis"])
+            tabs = st.tabs(["Client Features importance", "Features distribution", "Additional Client Information"])
 
             with tabs[0]:
                 # Fetch client Info           
@@ -418,15 +418,13 @@ def main():
 
                     st.table(client_info)
 
-            with tabs[3]:
-                st.write('shap_values[0].shape', shap_values[0].shape)
-                st.write('st.session_state.df_clients', st.session_state.df_clients)
-                st.pyplot(shap.summary_plot(shap_values, top_features_names, plot_type='bar', show=True, color_bar=True, max_display=15))
-                st.pyplot(shap.summary_plot(shap_values[0], top_features_names, plot_type='violin', show=True, color_bar=True, max_display=15))
-                st.pyplot(shap.summary_plot(shap_values[1], top_features_names, plot_type='violin', show=True, color_bar=True, max_display=15))
-                st.pyplot(shap.summary_plot(shap_values[0], top_features_names, plot_type='dot', show=True, color_bar=True, max_display=15))
-                st.pyplot(shap.summary_plot(shap_values[1], top_features_names, plot_type='dot', show=True, color_bar=True, max_display=15))
-                #shap.summary_plot(shap_values, st.session_state.df_clients, plot_type='bar', show=False, color_bar=False, max_display=15)
+            #with tabs[3]:
+            #    st.pyplot(shap.summary_plot(shap_values, top_features_names, plot_type='bar', show=True, color_bar=True, max_display=15))
+            #    st.pyplot(shap.summary_plot(shap_values[0], top_features_names, plot_type='violin', show=True, color_bar=True, max_display=15))
+            #    st.pyplot(shap.summary_plot(shap_values[1], top_features_names, plot_type='violin', show=True, color_bar=True, max_display=15))
+            #    st.pyplot(shap.summary_plot(shap_values[0], top_features_names, plot_type='dot', show=True, color_bar=True, max_display=15))
+            #    st.pyplot(shap.summary_plot(shap_values[1], top_features_names, plot_type='dot', show=True, color_bar=True, max_display=15))
+            #    #shap.summary_plot(shap_values, st.session_state.df_clients, plot_type='bar', show=False, color_bar=False, max_display=15)
 
     else:
         with st.sidebar:
