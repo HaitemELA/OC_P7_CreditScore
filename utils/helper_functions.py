@@ -39,7 +39,8 @@ def load_model(model_path='model/model.pkl'):
     """
     # Load the trained model
     with open(model_path, 'rb') as model_file:
-        model, booster = pickle.load(model_file)
+        #model, booster = pickle.load(model_file)
+        model = pickle.load(model_file)
     gc.collect()
     
     return model#, booster
