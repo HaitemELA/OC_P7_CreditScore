@@ -11,7 +11,7 @@ import gc
 
 # append utils to recognize helper_functions
 sys.path.append('./utils')
-from app_helper_functions import load_model, load_data, load_raw_data, features_prediction, shap_explainer, load_train_data, Extract_Global_shap_values
+from .app_helper_functions import load_model, load_data, load_raw_data, features_prediction, shap_explainer, load_train_data, Extract_Global_shap_values
 
 app = Flask(__name__)
 
