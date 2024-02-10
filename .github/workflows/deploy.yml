@@ -26,7 +26,7 @@ jobs:
             cd /home/ec2-user/p7_credit_score/OC_P7_CreditScore_github
             nohup python3.10 api/app.py > output.log 2>&1 &
             nohup streamlit run dashboard/dash_app.py > streamlit.log 2>&1 &
-            mlflow ui --host 0.0.0.0 --port 5000 &
+            #mlflow ui --host 0.0.0.0 --port 5000 &
             #mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri /home/ec2-user/p7_credit_score/OC_P7_CreditScore_github/mlflow
 
       - name: Run Unit Tests
