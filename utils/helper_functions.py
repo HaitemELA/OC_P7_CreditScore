@@ -9,7 +9,7 @@ import gc
 import base64
 import mlflow
 import mlflow.sklearn
-mlflow.set_tracking_uri(r'file///C:\Users\Imtech\Desktop\DATA_SCIENTIST\PORJET_7\mlruns')
+mlflow.set_tracking_uri(r'file///./db/mlruns')
 
 import os
 
