@@ -57,7 +57,7 @@ def load_raw_data(data_path='DB/application_test.csv'):
 
     return data_raw
 
-def load_train_data(columns_to_select, data_path='DB/train_df_cleaned_sample_7000.csv'):
+def load_train_data(columns_to_select, data_path='DB/train_df_cleaned_sample_6000.csv'):
     train_df = pd.read_csv(data_path, index_col='SK_ID_CURR')[['TARGET'] + columns_to_select.tolist()].sample(n=5000)
     train_df, kmeansModel = Kmeans_add_cluster_column(train_df)
     gc.collect()
