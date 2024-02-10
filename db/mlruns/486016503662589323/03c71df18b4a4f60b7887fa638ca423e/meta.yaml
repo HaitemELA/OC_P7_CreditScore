@@ -1,0 +1,15 @@
+artifact_uri: file///C:\Users\Imtech\Desktop\DATA_SCIENTIST\PORJET_7\mlruns/486016503662589323/03c71df18b4a4f60b7887fa638ca423e/artifacts
+end_time: 1707558654593
+entry_point_name: ''
+experiment_id: '486016503662589323'
+lifecycle_stage: active
+run_id: 03c71df18b4a4f60b7887fa638ca423e
+run_name: lyrical-hound-750
+run_uuid: 03c71df18b4a4f60b7887fa638ca423e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1707488207559
+status: 3
+tags: []
+user_id: Imtech

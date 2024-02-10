@@ -1,0 +1,36 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: |
+            pip3.10 install -r requirements.txt            
+      - name: CD to working directory and git fetch
+        run: |
+            cd /home/ec2-user/p7_credit_score/OC_P7_CreditScore_github
+            git fetch origin
+            git reset --hard origin/main
+      - name: Run application
+        run: |
+            cd /home/ec2-user/p7_credit_score/OC_P7_CreditScore_github
+            nohup python3.10 api/app.py > output.log 2>&1 &
+            nohup streamlit run dashboard/dash_app.py > streamlit.log 2>&1 &
+            mlflow ui --host 0.0.0.0 --port 5000 &
+            #mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri /home/ec2-user/p7_credit_score/OC_P7_CreditScore_github/mlflow
+
+      - name: Run Unit Tests
+        run: |
+            cd /home/ec2-user/p7_credit_score/OC_P7_CreditScore_github
+            python3.10 -m pytest utils/unitary_test.py
+            
