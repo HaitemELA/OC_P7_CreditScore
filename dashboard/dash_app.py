@@ -289,7 +289,10 @@ def main():
             ('Client analysis', 'Global analysis'))
         
         if analysis_type == 'Client analysis':
-            SK_ID_CURR = st.text_input("Enter loan request ID:")
+            #SK_ID_CURR = st.text_input("Enter loan request ID:")
+            SK_ID_CURR = st.selectbox('Enter loan request ID:', (100001, 100005, 100740, 100744, 100745,
+                                                                 100747, 100751, 100752, 100753, 100754,
+                                                                 100760, 100762))
             # Convert the input to numpy.int64
             try:
                 SK_ID_CURR = np.int64(SK_ID_CURR)
