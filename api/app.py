@@ -149,7 +149,6 @@ def client_info():
 
 @app.route('/all_clients', methods=['POST'])
 def get_clients_data():
-    print('RECEEEIIIIIIIVED')
     try:
         # Get input data from the request
         rqst = request.get_json(force=True)

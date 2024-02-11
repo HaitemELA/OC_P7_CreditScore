@@ -139,7 +139,7 @@ def create_credit_score_gauge(predicted_prob):
     try:
         # Convert probability to a score between 0 and 100
         credit_score = int(predicted_prob[0] * 100)
-        Threshold = 100*(1 - 0.4949)
+        Threshold = 100*(1 - 0.4801)
 
         # Define labels for likely to pay or not
         pay_labels = ["Not Likely to Pay", "Likely to Pay"]
@@ -266,17 +266,6 @@ def main():
     st.set_page_config(page_title="P7_Client_Dashboard", page_icon="📊", layout="wide")
 
     # Specify the absolute path to the logo image
-    #st.session_state.logo_path = os.path.join(current_dir, '../img/logo.png')
-    #st.session_state.logo = Image.open(st.session_state.logo_path)
-#
-    #width, height = st.session_state.logo.size 
-    ## Setting the points for cropped image 
-    #left = 6
-    #top = height / 4
-    #right = 174
-    #bottom = 3 * height / 4
-    #newsize = (20, 20)
-#
     #st.session_state.logo1 = st.session_state.logo.crop((left, top, right, bottom)).resize(newsize)
     ## Open the image using the absolute path
     ##st.session_state.resized_logo = st.session_state.logo.resize((20, 20), Image.Resampling.BICUBIC)
@@ -297,7 +286,7 @@ def main():
         #st.image(st.session_state.logo, caption='Prêt à dépenser')
         analysis_type = st.radio(
             "Please select an analysis to perform",
-            ('Global analysis', 'Client analysis'))
+            ('Client analysis', 'Global analysis'))
         
         if analysis_type == 'Client analysis':
             SK_ID_CURR = st.text_input("Enter loan request ID:")
@@ -445,8 +434,8 @@ def main():
         col_g1, col_g2 = st.columns([1, 1])
         with col_g1:
             st.title("Definition of a successful loan request")
-            st.session_state.violin_blue = shap.summary_plot(global_shap_values[0], feature_names, plot_type='violin',
-                                            show=True, title='Definition of a successful client', color='blue',
+            st.session_state.violin_blue = shap.summary_plot(global_shap_values[0], feature_names, plot_type='violin', 
+                                            show=True, title='Definition of a successful client', cmap='cool', #color='cool',
                                             color_bar=True, max_display=st.session_state.top_global_features)
             
             st.pyplot(st.session_state.violin_blue)
