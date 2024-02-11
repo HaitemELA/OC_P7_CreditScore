@@ -190,9 +190,9 @@ def create_credit_score_gauge(predicted_prob):
             margin=dict(l=10, r=10, b=10, t=10)  # Adjusted margin
         )
 
-        for i in range(0, credit_score + 1, 2):
-            fig.update_traces(value=i)
-            time.sleep(0.01)
+        #for i in range(0, credit_score + 1, 2):
+        #    fig.update_traces(value=i)
+        #    time.sleep(0.01)
 
         # Add ranking and likelihood annotations in the middle of the plot
         annotation_text = f"<b>{ranking}</b><br>{  pay_label}"
