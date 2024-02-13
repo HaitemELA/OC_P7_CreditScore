@@ -16,6 +16,7 @@ import pickle
 import base64
 from PIL import Image
 import os
+import matplotlib
 
 # Get the absolute path to the current directory
 current_dir = os.path.dirname(os.path.realpath(__file__))
@@ -69,10 +70,6 @@ def get_clients_data(selected_features):
     if response.status_code == 200:
         # Parse the JSON response
         response_data = response.json()
-        print('***********************************')
-        print('response_data', type(response_data))
-        print('***********************************')
-
 
         # Access the 'clients_data' key in the response
         df_clients = pd.DataFrame(response_data['clients_data'])
@@ -270,7 +267,7 @@ def main():
     ## Open the image using the absolute path
     ##st.session_state.resized_logo = st.session_state.logo.resize((20, 20), Image.Resampling.BICUBIC)
     #st.image(st.session_state.logo1, caption='Prêt à dépenser')
-    st.markdown("<h1 style='text-align: center;'>CREDIT SCORE ANALYZER2</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center;'>CREDIT SCORE ANALYZER</h1>", unsafe_allow_html=True)
 
 
     global_shap_values, feature_names, exp_0, featue_importance = get_shap_values()
@@ -284,9 +281,7 @@ def main():
         #st.session_state.logo = Image.open(st.session_state.logo_path)
 #
         #st.image(st.session_state.logo, caption='Prêt à dépenser')
-        analysis_type = st.radio(
-            "Please select an analysis to perform",
-            ('Client analysis', 'Global analysis'))
+        analysis_type = st.radio("Please select an analysis to perform", ('Client analysis', 'Global analysis'))
         
         if analysis_type == 'Client analysis':
             #SK_ID_CURR = st.text_input("Enter loan request ID:")
@@ -347,35 +342,37 @@ def main():
                 st.markdown(
                             f"""
                             <div style="background-color: {background_color}; padding: 13px; border-radius: 5px;">
-                                <h3 style="text-align: center;">Outcome</h3>
+                                <h3 style="text-align: center;">{pay_label}</h3>
                                 <p style="font-size: 1.2em;"><b>Client's ranking:</b> {ranking}</p>
                                 <p style="font-size: 1.2em;"><b>Credit score:</b> {credit_score}</p>
-                                <p style="font-size: 1.2em;"><b>Decision:</b> {pay_label}</p>
                             </div>
                             """,
                             unsafe_allow_html=True
                             )
-
-
-
 
             ## Create tabs
             tabs = st.tabs(["Client Features importance", "Features distribution", "Additional Client Information"])
 
             with tabs[0]:
                 # Fetch client Info           
-                st.session_state.top_features  = st.slider("You can select up to 10 features", min_value=1, max_value=10, value=5)
                 cluster = np.int64(result["cluster"])
                 decision = np.int64(result["decision"])
                 idx = result['idx']             
 
+                #st.title("Feature Importance in Credit Scoring")
+                #st.header("Feature Importance in Credit Scoring")
+                #st.subheader("Feature Importance in Credit Scoring")
+                st.markdown("<h3 style='text-align: center;'>Feature Importance in Credit Scoring</h3>", unsafe_allow_html=True)
+
                 
-                tab0_col1, tab0_col2, tab0_col3 = st.columns([1, 4, 1])
-                with tab0_col2:
+                tab0_col1, tab0_col2= st.columns([1, 1])
+                with tab0_col1:
+                    st.session_state.top_features  = st.slider("You can select up to 10 features", min_value=1, max_value=10, value=5)
                     st.pyplot(shap.plots.waterfall(exp_0[idx], max_display=st.session_state.top_features))
+                with tab0_col2:
+                    st.pyplot(shap.force_plot(exp_0[idx],  matplotlib=matplotlib))
 
             with tabs[1]:
-
                 encoded_client_data = result['client_data']
                 serialized_client_data= base64.b64decode(encoded_client_data)
                 client_data = pickle.loads(serialized_client_data)
@@ -434,19 +431,21 @@ def main():
             st.title("Average features impact on the prediction")
             st.pyplot(shap.summary_plot(global_shap_values, feature_names, plot_type='bar', show=True, color_bar=True, plot_size=0.18,
                                     title='Average features impact on the prediction', max_display=st.session_state.top_global_features))
+            
         col_g1, col_g2 = st.columns([1, 1])
+
         with col_g1:
-            st.title("Definition of a successful loan request")
+            st.subheader("Definition of a successful loan request")
             st.session_state.violin_blue = shap.summary_plot(global_shap_values[0], feature_names, plot_type='violin', 
-                                            show=True, title='Definition of a successful client', cmap='cool', #color='cool',
+                                            show=True, cmap='cool', #color='cool',
                                             color_bar=True, max_display=st.session_state.top_global_features)
             
             st.pyplot(st.session_state.violin_blue)
         with col_g2:
-            st.title("Definition of a refused loan request")
-            st.pyplot(shap.summary_plot(global_shap_values[1], feature_names, plot_type='violin', show=True, title='Definition of a successful client', color='red', color_bar=True, max_display=st.session_state.top_global_features))
-        #st.pyplot(shap.summary_plot(global_shap_values, feature_names, plot_type='dot', show=True, color_bar=True, max_display=st.session_state.top_global_features))
-
+            st.subheader("Definition of a refused loan request")
+            st.pyplot(shap.summary_plot(global_shap_values[1], feature_names, plot_type='violin', show=True,
+                                        color='red', color_bar=True, max_display=st.session_state.top_global_features))
+        #st.pyplot(shap.summary_plot(global_shap_values[0], feature_names, plot_type='dot'))
 
 if __name__ == "__main__":
     main()

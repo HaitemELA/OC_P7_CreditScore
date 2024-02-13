@@ -23,9 +23,11 @@ train_df, KmeansModel = load_train_data(columns_to_select)
 @app.errorhandler(404)
 def not_found(error):
     response = {'error': error}
-    print(response)
     return make_response(jsonify(response), 404)
 
+@app.route('/')
+def index():
+    return request.base_url
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -37,7 +39,6 @@ def predict():
         SK_ID_CURR = np.int64(rqst['data']['SK_ID_CURR'])
 
         client_features, client_decision, client_probability, global_features, idx, client_data = features_prediction(data, model, SK_ID_CURR)
-        print("client decisiion ", client_decision)
         # Encode SHAP values to base64
         global_shap_values, local_shap_values, feature_names = shap_explainer(client_features, global_features, model, idx, client_decision)
 
@@ -51,10 +52,7 @@ def predict():
         serialized_client_data = pickle.dumps(client_data)
         base64_local_client_data = base64.b64encode(serialized_client_data).decode('utf-8')
 
-        print('clustering')
-        print('data', data.loc[data.index == SK_ID_CURR])
         cluster = KmeansModel.predict(data.loc[data.index== SK_ID_CURR])[0]
-        print('cluster', str(cluster), type(str(cluster)))
 
         # Return the prediction as JSON
         response = {'decision': client_decision,
@@ -66,11 +64,8 @@ def predict():
                     'idx': idx,
                     'client_data': base64_local_client_data
                     }
-        #print('response[cluster]', response['cluster'], type(response['cluster']))
-        #print('response[probability]', response['probability'], type(response['probability']))
-        #print('response[cluster]', response[cluster], type(response[cluster]))
-        #print('response', response)
-        #gc.collect()
+
+        gc.collect()
 
         return jsonify(response)
 
@@ -86,8 +81,6 @@ def get_shap_values():
         global_shap_values, feature_names, exp_0 = Extract_Global_shap_values(data, model)
         serialized_global_shap_values = pickle.dumps(global_shap_values)
         base64_global_shap_values = base64.b64encode(serialized_global_shap_values).decode('utf-8')
-
-        print(exp_0)
 
         #Encode explanation:
         serialized_explanation = pickle.dumps(exp_0)
@@ -115,12 +108,25 @@ def get_shap_values():
     
 #
     # Fetch client DATA
-@app.route('/client', methods=['POST'])
+@app.route('/client', methods=['POST', 'GET'])
 def client_info():
     try:
-        # Get input data from the request
-        rqst = request.get_json(force=True)
-        SK_ID_CURR = np.int64(rqst['data']['SK_ID_CURR'])
+        ## Get input data from the request
+        #rqst = request.get_json(force=True)
+        #SK_ID_CURR = np.int64(rqst['data']['SK_ID_CURR'])
+
+        if request.method == 'GET':
+            # Get input data from the request parameters
+            SK_ID_CURR = np.int64(request.args.get('SK_ID_CURR'))
+        elif request.method == 'POST':
+            # Get input data from the request body
+            rqst = request.get_json(force=True)
+            SK_ID_CURR = np.int64(rqst['data']['SK_ID_CURR'])
+        else:
+            raise ValueError("Unsupported HTTP method")
+
+
+
 
         # Extract client info
         client_data = raw_data.loc[raw_data.index == SK_ID_CURR]
@@ -157,8 +163,6 @@ def get_clients_data():
         #features_list = ['TARGET'] + ast.literal_eval(features)
 
         features_list = ast.literal_eval(features)
-        print(features_list)
-
 
         missing_features = [feature for feature in features_list if feature not in train_df.columns]
 
@@ -205,5 +209,5 @@ def get_clients_data():
 
 if __name__ == '__main__':
     gc.collect()
-    app.run(host='localhost', port=8001, debug=True)
+    app.run(host='0.0.0.0', port=8001, debug=False)
 
