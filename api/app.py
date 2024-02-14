@@ -185,28 +185,6 @@ def get_clients_data():
         return jsonify({'error get_clients_data': str(e)})
 
 
-## Sample endpoint for getting selected features
-#@app.route('/selected_features', methods=['POST'])
-#def get_selected_features():
-#    try:
-#        json_data = request.get_json()
-#
-#        # Check if required keys are present
-#        if 'sorted_feature_importance' not in json_data or 'shap_values' not in json_data:
-#            raise ValueError("Missing required keys in JSON data.")
-#
-#        sorted_feature_importance = json_data['sorted_feature_importance']
-#        shap_values = json_data['shap_values']
-#
-#        # Perform feature selection
-#        selected_features = perform_feature_selection(data, sorted_feature_importance, shap_values)
-#
-#        return jsonify({'selected_features': selected_features})
-#
-#    except Exception as e:
-#        return jsonify({'error': str(e)})
-
-
 if __name__ == '__main__':
     gc.collect()
     app.run(host='0.0.0.0', port=8001, debug=False)
