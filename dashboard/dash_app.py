@@ -268,6 +268,7 @@ def main():
     ##st.session_state.resized_logo = st.session_state.logo.resize((20, 20), Image.Resampling.BICUBIC)
     #st.image(st.session_state.logo1, caption='Prêt à dépenser')
     st.markdown("<h1 style='text-align: center;'>CREDIT SCORE ANALYZER</h1>", unsafe_allow_html=True)
+    #st.markdown("<h1 style='text-align: center;'>CREDIT SCORE DASHBOARD</h1>", unsafe_allow_html=True)
 
 
     global_shap_values, feature_names, exp_0, featue_importance = get_shap_values()
